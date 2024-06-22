@@ -2,6 +2,10 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+import { TanStackRouterVite } from '@tanstack/router-vite-plugin'
+import { join } from 'path';
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
+
 
 export default defineConfig({
   root: __dirname,
@@ -17,7 +21,17 @@ export default defineConfig({
     host: 'localhost',
   },
 
-  plugins: [react(), nxViteTsPaths()],
+  plugins: [
+    react(),
+    TanStackRouterVite({
+      routesDirectory: join(__dirname, 'src/routes'),
+      generatedRouteTree: join(__dirname, 'src/routeTree.gen.ts'),
+      routeFileIgnorePrefix: '-',
+      quoteStyle: 'single',
+    }),
+    nxViteTsPaths(),
+    nodePolyfills()
+  ],
 
   // Uncomment this if you are using workers.
   // worker: {
